@@ -21,7 +21,7 @@
             // Default to top iframe
             widgetStyle.width = "100%";
             widgetStyle.height = "32px";
-            widgetStyle.position = "absolute";
+            widgetStyle.position = "fixed";
             widgetStyle.top = "0px";
             widgetStyle.right = "0px";
         }
