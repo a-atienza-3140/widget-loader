@@ -1,78 +1,70 @@
 (() => {
-    const script = document.currentScript;
+  const script = document.currentScript;
 
-    const createWidget = () => {
-        const widget = document.createElement("div");
-        const widgetStyle = widget.style;
+  const createWidget = () => {
+    const widget = document.createElement("div");
+    const widgetStyle = widget.style;
 
-        // Default styles for the widget
-        widgetStyle.display = "none";
-        widgetStyle.boxSizing = "border-box";
+    widgetStyle.position = "sticky";
+    widgetStyle.top = "0";
+    widgetStyle.zIndex = "9999";
 
-        // position based on `data-position` attribute
-        const position = script.getAttribute("data-position");
-        if (position === "sticky") {
-            widgetStyle.width = "360px";
-            widgetStyle.height = "60px";
-            widgetStyle.position = "fixed";
-            widgetStyle.bottom = "20px";
-            widgetStyle.right = "20px";
-        } else {
-            // Default to top iframe
-            widgetStyle.width = "100%";
-            widgetStyle.height = "32px";
-            widgetStyle.position = "fixed";
-            widgetStyle.top = "0px";
-            widgetStyle.right = "0px";
-        }
+    widgetStyle.width = "100%";
+    widgetStyle.height = "60px";
+    widgetStyle.backgroundColor = "#f0f0f0";
+    widgetStyle.display = "none";
+    widgetStyle.boxSizing = "border-box";
+    widgetStyle.cursor = "pointer";
 
-        return widget;
-    };
+    return widget;
+  };
 
-    const createIframe = () => {
-        const iframe = document.createElement("iframe");
-        const iframeStyle = iframe.style;
+  const createIframe = () => {
+    const iframe = document.createElement("iframe");
+    const iframeStyle = iframe.style;
 
-        // Styles for the iframe
-        iframeStyle.boxSizing = "border-box";
-        iframeStyle.position = "absolute";
-        iframeStyle.top = 0;
-        iframeStyle.width = "100vw";
-        iframeStyle.height = "100vh";
-        iframeStyle.border = "none";
-        iframeStyle.margin = 0;
-        iframeStyle.padding = 0;
+    iframeStyle.boxSizing = "border-box";
+    iframeStyle.position = "fixed";
+    iframeStyle.top = 0;
+    iframeStyle.left = 0;
+    iframeStyle.width = "100vw";
+    iframeStyle.height = "100vh";
+    iframeStyle.border = "none";
+    iframeStyle.margin = 0;
+    iframeStyle.padding = 0;
+    iframeStyle.zIndex = "10000";
+    iframeStyle.display = "none";
 
-        return iframe;
-    };
+    return iframe;
+  };
 
-    const loadWidget = () => {
-        const widget = createWidget();
-        const iframe = createIframe();
+  const loadWidget = () => {
+    const widget = createWidget();
+    const iframe = createIframe();
 
-        widget.appendChild(iframe);
+    const brandName = script.getAttribute("data-brand") || "";
 
-        // Get attributes
-        const brandName = script.getAttribute("data-brand");
+    iframe.addEventListener("load", () => {
+      widget.style.display = "block";
+    });
 
-        iframe.addEventListener("load", () => {
-            widget.style.display = "block";
-        });
+    widget.addEventListener("click", () => {
+      iframe.style.display = "block";
+    });
 
-        // TODO: Change when widget content is ready
-        iframe.src = `https://a-atienza-3140.github.io/widget-content?brand=${encodeURIComponent(brandName || '')}`;
+    iframe.src = `https://a-atienza-3140.github.io/widget-content?brand=${encodeURIComponent(brandName)}`;
 
-        document.body.appendChild(widget);
-    };
+    document.body.insertBefore(widget, document.body.firstChild);
+    widget.appendChild(iframe);
+  };
 
-    // Load only after document is fully loaded
-    if (document.readyState === "complete") {
+  if (document.readyState === "complete") {
+    loadWidget();
+  } else {
+    document.addEventListener("readystatechange", () => {
+      if (document.readyState === "complete") {
         loadWidget();
-    } else {
-        document.addEventListener("readystatechange", () => {
-            if (document.readyState === "complete") {
-                loadWidget();
-            }
-        });
-    }
+      }
+    });
+  }
 })();
