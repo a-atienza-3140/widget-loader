@@ -37,8 +37,8 @@
         iframeStyle.boxSizing = "border-box";
         iframeStyle.position = "absolute";
         iframeStyle.top = 0;
-        iframeStyle.width = "100%";
-        iframeStyle.height = "100%";
+        iframeStyle.width = "100vw";
+        iframeStyle.height = "100vh";
         iframeStyle.border = "none";
         iframeStyle.margin = 0;
         iframeStyle.padding = 0;
